@@ -1,0 +1,33 @@
+resource "aws_s3_bucket" "static_website_bucket" {
+  bucket = "venkat4666222" # Replace with a globally unique bucket name
+}
+
+resource "aws_s3_bucket_website_configuration" "static_website_config" {
+  bucket = aws_s3_bucket.static_website_bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_object" "index" {
+  bucket       = aws_s3_bucket.static_website_bucket.id
+  key          = "index.html"
+  source       = "index.html"
+  content_type = "text/html"
+
+  depends_on = [aws_s3_bucket.static_website_bucket]
+}
+
+resource "aws_s3_object" "error" {
+  bucket       = aws_s3_bucket.static_website_bucket.id
+  key          = "error.html"
+  source       = "error.html"
+  content_type = "text/html"
+
+  depends_on = [aws_s3_bucket.static_website_bucket]
+}
